@@ -8,17 +8,21 @@ Resources:
         - 'RESOURCES'
       Compression: 'Parquet'
       Format: 'Parquet'
-      ReportName: 'test-report'
+      ReportName: 'map-migrated-rtis'
       ReportVersioning: 'CREATE_NEW_REPORT'
       RefreshClosedReports: True
       S3Bucket: !Ref Bucket
-      S3Prefix: 'usagereports/'
+      S3Prefix: 'map-migrated/'
       S3Region: 'us-east-1'
       TimeUnit: 'DAILY'
       ServiceToken: !GetAtt CustomCostUsageReportDefinitionLambda.Arn
   Bucket:
     Type: 'AWS::S3::Bucket'
-    Properties: {}
+    Properties: {
+      "Tags" : [ { "Key" : "Name", "Value" : "map-migrated" }, 
+                 { "Key" : "APP", "Value" : "map-migrated-app" },
+                 { "Key" : " map-migration-project-id", "Value" : "MPE13934" }]
+    }
   BucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     Properties:
