@@ -7,7 +7,7 @@ https://github.com/abdulrahimanat/cloud-formation/blob/main/org-taril.bucket.yam
 
 # Step 3 Gather the S3 bucket name that we created earlier using https://github.com/abdulrahimanat/cloud-formation/blob/main/org-taril.bucket.yaml.
 
-aws cloudformation describe-stack-resources --stack-name CloudTrailS3Bucket <span class="pl-k">|</span> \
+aws cloudformation describe-stack-resources --stack-name ####replace stack_name here #### <span class="pl-k">|</span> \
   grep Physical | \
   grep s3bucket
   
@@ -18,7 +18,7 @@ aws cloudformation describe-stack-resources --stack-name CloudTrailS3Bucket <spa
  aws organizations enable-aws-service-access \
   --service-principal cloudtrail.amazonaws.com
   
-  # step 6 we create the actual trai 
+  # step 6 wlcreate the actual trail, Replace the bucket name with the one you created using above CFT
   
   aws cloudtrail create-trail \
   --name org-trail \
