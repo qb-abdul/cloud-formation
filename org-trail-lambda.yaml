@@ -72,7 +72,7 @@ Resources:
       Properties:
         Code:
           S3Bucket: cf-abdul
-          S3Key: function.zip
+          S3Key: org_trail.zip
         Description: Cloudformation custom resource for Org CloudTrail
         Handler: lambda_function.lambda_handler
         Role: !GetAtt 'CustomOrgCloudTrailLambdaExecutionRole.Arn'
