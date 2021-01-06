@@ -1,0 +1,87 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  BucketName:
+    Type: String
+    Description: Provide the bucket name where account details has to store
+Resources:
+  ScheduledRule:
+    Type: 'AWS::Events::Rule'
+    Properties:
+      Description: ScheduledRule
+      ScheduleExpression: rate(60 minutes)
+      State: ENABLED
+      Targets:
+        - Arn:
+            'Fn::GetAtt':
+              - LambdaFunction
+              - Arn
+          Id: !Ref LambdaFunction
+  PermissionForEventsToInvokeLambda:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !Ref LambdaFunction
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn:
+        'Fn::GetAtt':
+          - ScheduledRule
+          - Arn
+  LambdaExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AWSLambdaExecute'
+        - 'arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess'
+      Policies:
+        - PolicyName: s3_policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                  - 's3:GetObject'
+                Resource: !Sub 'arn:aws:s3:::${BucketName}/*'
+              - Effect: Allow
+                Action:
+                  - 's3:ListBucket'
+                Resource: !Sub 'arn:aws:s3:::${BucketName}'
+  LambdaFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+          import os
+          from datetime import datetime
+          now = str(datetime.now())
+          file_name = 'prince-' + now + '.json'
+          bucket_name = os.environ['BUCKET_NAME']
+          def handler(event, context):
+              client = boto3.client('organizations')
+              s3 = boto3.client('s3')
+              response = client.list_accounts()
+              del response["ResponseMetadata"]
+              for l in response['Accounts']:
+                  for k in ["Arn", "Email","JoinedTimestamp"]:
+                      del l[k]
+            
+              json_object = json.dumps(response, indent = 4)   
+              s3.put_object(Bucket=bucket_name,Key=file_name,Body=json_object)   
+      Handler: index.handler
+      Runtime: python3.6
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref BucketName
