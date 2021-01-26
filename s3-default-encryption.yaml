@@ -14,12 +14,15 @@ Metadata:
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
     Properties:
       BucketName: !Ref BucketName
       BucketEncryption: 
         ServerSideEncryptionConfiguration: 
         - ServerSideEncryptionByDefault:
-            SSEAlgorithm: AES256      
+            SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
       Tags:
         -
           Key: Name
