@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This template creates a cross account role for aws config in an account.
+Outputs:
+  RoleARN:
+    Description: The ARN of the role that can be assumed by the other account.
+    Value: !GetAtt 
+      - BatchRole
+      - Arn
+Parameters:
+  OtherAccountNumber:
+    AllowedPattern: '[0-9]+'
+    Description: The 12 digit AWS account number to grant access to.
+    MaxLength: '12'
+    MinLength: '12'
+    Type: String
+Resources:
+  BatchRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              AWS: !Join 
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref OtherAccountNumber
+                  - ':root'
+            Sid: ''
+        Version: 2012-10-17
+      Path: /
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - 'config:BatchGet*'
+                  - 'config:Describe*'
+                  - 'config:Get*'
+                  - 'config:List*'
+                  - 'config:Select*'
+                Effect: Allow
+                Resource: '*'
+                Sid: Stmt1434989080227
+            Version: 2012-10-17
+          PolicyName: ConfigPolicy
+    Type: 'AWS::IAM::Role'
