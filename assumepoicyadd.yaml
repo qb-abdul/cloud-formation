@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  This template creates a Assume role in an
+  account.
+Parameters:
+  AccessRequiredRoleName:
+    Description: Name of Role where access is required.
+    Type: String
+    Default: ec2-role
+  OtherAccountRoleArn:
+    Description: ARN of Role in other account to be assumed.
+    Type: String
+Resources:
+  AssumePolicyAttachment:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: AssumeRolePolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: 'sts:AssumeRole'
+            Resource: !Ref OtherAccountRoleArn
+      Roles:
+        - !Ref AccessRequiredRoleName
