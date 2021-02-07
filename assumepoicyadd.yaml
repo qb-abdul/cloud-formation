@@ -6,7 +6,7 @@ Parameters:
   AccessRequiredRoleName:
     Description: Name of Role where access is required.
     Type: String
-    Default: ec2-role
+    Default: hamropsprod-hamropsprod-Splunk-KinesisHeaveyForwarder-Role
   OtherAccountRoleArn:
     Description: ARN of Role in other account to be assumed.
     Type: String
