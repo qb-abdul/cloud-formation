@@ -1,0 +1,272 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: CloudFormation Template to create Security Group and Rules
+Parameters:
+  VPC:
+    Type: String
+    Description: Select the VPC where Security goup has to be created
+    Type: AWS::EC2::VPC::Id
+
+
+# Sg Rule 1
+  SGRule1Descrption: 
+    Description: Security group Ruel1 Descrption
+    Default: ""
+    Type: String
+
+  SGRule1CidrIp: 
+    Description: Security group  Rule 1 CIDR IP
+    Default: ""
+    Type: String
+
+  SGRule1Port: 
+    Description: Security group  Rule 1 Port
+    Default: ""
+    Type: String  
+# Sg Rule 2
+  SGRule2Descrption: 
+    Description: Security group Ruel 2 Descrption
+    Default: ""
+    Type: String
+
+  SGRule2CidrIp: 
+    Description: Security group  Rule 2 CIDR IP
+    Default: ""
+    Type: String
+
+  SGRule2Port: 
+    Description: Security group  Rule 2 Port
+    Default: ""
+    Type: String  
+  # Sg Rule 3
+  SGRule3Descrption: 
+    Description: Security group Ruel 3 Descrption
+    Default: ""
+    Type: String
+
+  SGRule3CidrIp: 
+    Description: Security group  Rule 3 CIDR IP
+    Default: ""
+    Type: String
+
+  SGRule3Port: 
+    Description: Security group  Rue3 Port
+    Default: ""
+    Type: String  
+# Sg Rule 4
+  SGRule4Descrption: 
+    Description: Security group Ruel 4 Descrption
+    Default: ""
+    Type: String
+
+  SGRule4CidrIp: 
+    Description: Security group  Rule 4 CIDR IP
+    Default: ""
+    Type: String
+
+  SGRule4Port: 
+    Description: Security group  Rule 4 Port
+    Default: ""
+    Type: String  
+# Sg Rule 5
+  SGRule5Descrption: 
+    Description: Security group Ruel 5 Descrption
+    Default: ""
+    Type: String
+
+  SGRule5CidrIp: 
+    Description: Security group  Rule 5 CIDR IP
+    Default: ""
+    Type: String
+
+  SGRule5Port: 
+    Description: Security group  Rule 5 Port
+    Default: ""
+    Type: String  
+
+# Sg Rule 6
+  SGRule6Descrption: 
+    Description: Security group Ruel 6 Descrption
+    Default: ""
+    Type: String
+
+  SGRule6CidrIp: 
+    Description: Security group  Rule 6 CIDR IP
+    Default: ""
+    Type: String
+
+  SGRule6Port: 
+    Description: Security group  Rule 6 Port
+    Default: ""
+    Type: String  
+
+# Sg Rule 7
+  SGRule7Descrption: 
+    Description: Security group Rule 7 Descrption
+    Default: ""
+    Type: String
+
+  SGRule7CidrIp: 
+    Description: Security group  Rule 7 CIDR IP
+    Default: ""
+    Type: String
+
+  SGRule7Port: 
+    Description: Security group  Rule 7 Port
+    Default: ""
+    Type: String  
+
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: Select VPC 
+        Parameters:
+          - VPC
+      
+      - Label:
+          default: Security Group Rule One parmaters
+        Parameters:
+          - SGRule1Descrption
+          - SGRule1CidrIp
+          - SGRule1Port
+      - Label:
+          default: Security Group Rule Two parmaters
+        Parameters:
+          - SGRule2Descrption
+          - SGRule2CidrIp
+          - SGRule2Port
+      - Label:
+          default: Security Group Rule Three parmaters
+        Parameters:
+          - SGRule3Descrption
+          - SGRule3CidrIp
+          - SGRule3Port
+      - Label:
+          default: Security Group Rule Four parmaters
+        Parameters:
+          - SGRule4Descrption
+          - SGRule4CidrIp
+          - SGRule4Port
+      - Label:
+          default: Security Group Rule Five parmaters
+        Parameters:
+          - SGRule5Descrption
+          - SGRule5CidrIp
+          - SGRule5Port
+      - Label:
+          default: Security Group Rule six parmaters
+        Parameters:
+          - SGRule6Descrption
+          - SGRule6CidrIp
+          - SGRule6Port
+      - Label:
+          default: Security Group Rule Seven parmaters
+        Parameters:
+          - SGRule7Descrption
+          - SGRule7CidrIp
+          - SGRule7Port
+      
+
+
+Conditions:
+  IsRule1: !Not [!Equals [!Ref SGRule1CidrIp, ""]]
+  IsRule2: !Not [!Equals [!Ref SGRule2CidrIp, ""]]
+  IsRule3: !Not [!Equals [!Ref SGRule3CidrIp, ""]]
+  IsRule4: !Not [!Equals [!Ref SGRule4CidrIp, ""]]
+  IsRule5: !Not [!Equals [!Ref SGRule5CidrIp, ""]]
+  IsRule6: !Not [!Equals [!Ref SGRule6CidrIp, ""]]
+  IsRule7: !Not [!Equals [!Ref SGRule7CidrIp, ""]]
+
+
+
+Resources:
+  SecurityGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+          GroupDescription: "Security Group"
+          VpcId: !Ref VPC  
+
+             
+
+  SecurityGroupIngressRule1:
+      Condition: IsRule1
+      Type: AWS::EC2::SecurityGroupIngress
+      Properties:
+          Description: !Ref SGRule1Descrption
+          GroupId: !Ref SecurityGroup
+          CidrIp: !Ref SGRule1CidrIp
+          IpProtocol: tcp
+          FromPort: !Ref SGRule1Port
+          ToPort: !Ref SGRule1Port
+
+  SecurityGroupIngressRule2:
+      Condition: IsRule2
+      Type: AWS::EC2::SecurityGroupIngress
+      Properties:
+          Description: !Ref SGRule2Descrption
+          GroupId: !Ref SecurityGroup
+          CidrIp: !Ref SGRule2CidrIp
+          IpProtocol: tcp
+          FromPort: !Ref SGRule2Port
+          ToPort: !Ref SGRule2Port
+  
+  SecurityGroupIngressRule3:
+      Condition: IsRule3
+      Type: AWS::EC2::SecurityGroupIngress
+      Properties:
+          Description: !Ref SGRule3Descrption
+          GroupId: !Ref SecurityGroup
+          CidrIp: !Ref SGRule3CidrIp
+          IpProtocol: tcp
+          FromPort: !Ref SGRule3Port
+          ToPort: !Ref SGRule3Port
+          
+  SecurityGroupIngressRule4:
+      Condition: IsRule4
+      Type: AWS::EC2::SecurityGroupIngress
+      Properties:
+          Description: !Ref SGRule4Descrption
+          GroupId: !Ref SecurityGroup
+          CidrIp: !Ref SGRule4CidrIp
+          IpProtocol: tcp
+          FromPort: !Ref SGRule4Port
+          ToPort: !Ref SGRule4Port
+  SecurityGroupIngressRule5:
+      Condition: IsRule5
+      Type: AWS::EC2::SecurityGroupIngress
+      Properties:
+          Description: !Ref SGRule5Descrption
+          GroupId: !Ref SecurityGroup
+          CidrIp: !Ref SGRule5CidrIp
+          IpProtocol: tcp
+          FromPort: !Ref SGRule5Port
+          ToPort: !Ref SGRule5Port
+          
+  SecurityGroupIngressRule6:
+      Condition: IsRule6
+      Type: AWS::EC2::SecurityGroupIngress
+      Properties:
+          Description: !Ref SGRule6Descrption
+          GroupId: !Ref SecurityGroup
+          CidrIp: !Ref SGRule6CidrIp
+          IpProtocol: tcp
+          FromPort: !Ref SGRule6Port
+          ToPort: !Ref SGRule6Port
+  SecurityGroupIngressRule7:
+      Condition: IsRule7
+      Type: AWS::EC2::SecurityGroupIngress
+      Properties:
+          Description: !Ref SGRule7Descrption
+          GroupId: !Ref SecurityGroup
+          CidrIp: !Ref SGRule7CidrIp
+          IpProtocol: tcp
+          FromPort: !Ref SGRule7Port
+          ToPort: !Ref SGRule7Port
+
+  SecurityGroupEgress:
+      Type: AWS::EC2::SecurityGroupEgress
+      Properties:
+          Description: "Allow all outbound traffic"
+          GroupId: !Ref SecurityGroup
+          CidrIp: 0.0.0.0/0  
+          IpProtocol: "-1"
